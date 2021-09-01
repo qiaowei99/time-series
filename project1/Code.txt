@@ -1,0 +1,649 @@
+### CODES TO EXPLORE THE VARIABLES
+library(corrplot)
+library(ggplot2)
+library(gridExtra)
+library(ggfortify)
+
+```{r}
+data=read.csv("All data (index).csv")
+output=ts(data$Real.Output.Per.Person,frequency=4,start=c(1948,1))
+employ=ts(data$Employment,frequency=4,start=c(1948,1))
+price=ts(data$Implicit.Price.Deflator,frequency=4,start=c(1948,1))
+share=ts(data$labor.share,frequency=4,start=c(1948,1))
+cost=ts(data$Unit.Labor.Costs,frequency=4,start=c(1948,1))
+payment=ts(data$Unit.Nonlabor.Payments,frequency=4,start=c(1948,1))
+```
+
+```{r}
+par(mfrow=c(2,3))
+plot(output,ylab="Real output")
+plot(employ,ylab="Employment")
+plot(price,ylab="Deflator")
+plot(cost,ylab="Labor costs")
+plot(payment,ylab="Nonlabor payment")
+plot(share,ylab="Labor share")
+```
+
+
+```{r}
+
+fig1=autoplot(acf(output,lag.max=100,plot=FALSE),main="Autocorrelation of Real Output Per Person",colour = "brown")+ggtitle("Autocorrelation of Real Output Per Person") +
+  theme(plot.title = element_text(size = 10, face = "bold"))
+#fig1
+fig2=autoplot(acf(employ,lag.max=100,plot=FALSE),main="Autocorrelation of Employment",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig3=autoplot(acf(price,lag.max=100,plot=FALSE),main="Autocorrelation of Implict Pirce Deflator",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig4=autoplot(acf(share,lag.max=100,plot=FALSE),main="Autocorrelation of Labor Share",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig5=autoplot(acf(cost,lag.max=100,plot=FALSE),main="Autocorrelation of Unit Labor Cost",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig6=autoplot(acf(payment,lag.max=100,plot=FALSE),main="Autocorrelation of Unit Nonlabor Payments",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+```
+
+```{r}
+grid.arrange(fig1, fig2,fig3,fig4,fig5,fig6, nrow=3, ncol=2)
+```
+
+```{r}
+fig7=autoplot(acf(diff(output),lag.max=100,plot=FALSE),main="First Difference of Real Output Per Person",colour = "brown") +
+  theme(plot.title = element_text(size = 10, face = "bold"))
+#fig1
+fig8=autoplot(acf(diff(employ),lag.max=100,plot=FALSE),main="First Difference of Employment",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig9=autoplot(acf(diff(price),lag.max=100,plot=FALSE),main="First Difference of Implict Pirce Deflator",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig10=autoplot(acf(diff(share),lag.max=100,plot=FALSE),main="First Difference of Labor Share",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig11=autoplot(acf(diff(cost),lag.max=100,plot=FALSE),main="First Difference of Unit Labor Cost",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+
+fig12=autoplot(acf(diff(payment),lag.max=100,plot=FALSE),main="First Difference of Unit Nonlabor Payments",colour = "brown")+
+  theme(plot.title = element_text(size = 10, face = "bold"))
+```
+
+```{r}
+grid.arrange(fig7, fig8,fig9,fig10,fig11,fig12, nrow=3, ncol=2)
+```
+
+```{r}
+fig13=autoplot(ccf(output,employ,lag.max=100,plot=FALSE),main="CCF of Real Output Per Person & Employment",colour = "brown") +
+  theme(plot.title = element_text(size = 8, face = "bold"))
+#fig13
+
+fig14=autoplot(ccf(output,price,lag.max=100,plot=FALSE),main="CCF of Real Output Per Person & Implict Price Deflator",colour = "brown") +
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig15=autoplot(ccf(output,share,lag.max=100,plot=FALSE),main="CCF of Real Output Per Person & Labor Share",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig16=autoplot(ccf(output,cost,lag.max=100,plot=FALSE),main="CCF of Real Output Per Person & Unit Labor Cost",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig17=autoplot(ccf(output,payment,lag.max=100,plot=FALSE),main="CCF of Real Output Per Person & Unit Nonlabor Payments",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig19=autoplot(ccf(employ,cost,lag.max=100,plot=FALSE),main="CCF of Employment & Unit Labor costs",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig20=autoplot(ccf(employ,payment,lag.max=100,plot=FALSE),main="CCF of Employment & Unit Nonlabor payments",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig21=autoplot(ccf(employ,price,lag.max=100,plot=FALSE),main="CCF of Employment & Implicit Price Deflator",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig22=autoplot(ccf(price,share,lag.max=100,plot=FALSE),main="CCF of Implicit Price Deflator & Labor Share",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig23=autoplot(ccf(price,cost,lag.max=100,plot=FALSE),main="CCF of Implicit Price Deflator & Unit Labor Costs",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig24=autoplot(ccf(price,payment,lag.max=100,plot=FALSE),main="CCF of Implicit Price Deflator & Unit Nonlabor Payments",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig25=autoplot(ccf(share,cost,lag.max=100,plot=FALSE),main="CCF of Labor Share & Unit Labor Costs",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig26=autoplot(ccf(share,payment,lag.max=100,plot=FALSE),main="CCF of Labor Share & Unit Nonlabor Payments",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+
+fig27=autoplot(ccf(cost,payment,lag.max=100,plot=FALSE),main="CCF of Unit Labor Costs & Unit Nonlabor Payments",colour = "brown")+
+  theme(plot.title = element_text(size = 8, face = "bold"))
+```
+
+```{r}
+grid.arrange(fig13, fig14,fig15,fig16,fig17,fig18,fig19, fig20,nrow=4, ncol=2)
+```
+
+```{r}
+grid.arrange(fig21,fig22,fig23,fig24,fig25,fig26,fig27,nrow=4, ncol=2)
+```
+
+```{r}
+library(glmnet)
+```
+```{r}
+first_try=glmnet(as.matrix(data[,3:7]), data[,2] , standardize=TRUE, alpha=1)
+
+plot(first_try,  label = TRUE)
+```
+```{r}
+second_try=glmnet(as.matrix(data[,3:7]), data[,2],family = "poisson",standardize=TRUE, alpha=1)
+
+plot(second_try,  label = TRUE)
+```
+
+
+```{r}
+library(vars)
+data2=data[-1]
+```
+
+```{r}
+VARselect(y=data2, lag.max = 20, type = c("const", "trend", "both", "none"),
+season = NULL, exogen = NULL)
+```
+
+```{r}
+var=VAR(y = data2, p=3)
+```
+
+```{r}
+summary(var)
+causality(var, cause = NULL, vcov.=NULL, boot=FALSE, boot.runs=100)
+```
+
+```{r}
+plot(stability(var, type = c("OLS-CUSUM", "Rec-CUSUM", "Rec-MOSUM",
+"OLS-MOSUM", "RE", "ME", "Score-CUSUM", "Score-MOSUM",
+"fluctuation"), h = 0.15, dynamic = FALSE, rescale = TRUE))
+
+```
+
+```{r}
+var.predict<-predict(var,n.ahead=30,ci=0.95)
+var.predict
+```
+
+```{r}
+fanchart(var.predict)
+
+### CODES FOR REGRESSION
+setwd("C:/Users/wangj/Downloads")
+fp<-read.csv("All data (index).csv")
+library(astsa)
+library(TSA)
+library(Ecdat)
+library(tseries)
+library(lmtest)
+oup=ts(fp$Real.Output.Per.Person,fre=4,start = c(1947,1))
+ls=ts(fp$labor.share,fre=4,start=c(1947,1))
+lc=ts(fp$Unit.Labor.Costs,fre=4,start=c(1947,1))
+
+summary(fit<-lm(oup~ls+lc))
+t=time(fp$Real.Output.Per.Person)
+t2=trend^2
+t3=trend^3
+t4=trend^4
+t5=trend^5
+summary(fit1<-lm(oup~ls+lc+t))
+summary(fit2<-lm(oup~ls+lc+t+t2+t3+t4+t5))
+plot(rstudent(fit))
+plot(rstudent(fit1))
+plot(rstudent(fit2))
+dwtest(fit1)
+##Hildreth-Lu
+rho =seq(0.1,0.99,by=0.01)
+hildreth.lu <-function(rho, model){
+  #fp$Employment <-model.matrix(model)[,-1]
+  #fp$Implicit.Price.Deflator<-model.matrix(model)[,-1]
+  fp$labor.share<-model.matrix(model)[,-1]
+  fp$Unit.Labor.Costs<-model.matrix(model)[,-1]
+  #fp$Unit.Nonlabor.Payments<-model.matrix(model)[,-1]
+  fp$Real.Output.Per.Person <-model.response(model.frame(model))
+  n <-length(fp$Real.Output.Per.Person)
+  t <- 1:n
+  fp$Real.Output.Per.Person <- fp$Real.Output.Per.Person[t]-rho*fp$Real.Output.Per.Person[t-1]
+  #fp$Employment <- fp$Employment[t]-rho*fp$Employment[t-1]
+  #fp$Implicit.Price.Deflator <- fp$Implicit.Price.Deflator[t]-rho*fp$Implicit.Price.Deflator[t-1]
+  fp$labor.share <- fp$labor.share[t]-rho*fp$labor.share[t-1]
+  fp$Unit.Labor.Costs <- fp$Unit.Labor.Costs[t]-rho*fp$Unit.Labor.Costs[t-1]
+  #fp$Unit.Nonlabor.Payments <- fp$Unit.Nonlabor.Payments[t]-rho*fp$Unit.Nonlabor.Payments[t-1]
+  #return(lm(fp$Real.Output.Per.Person~fp$Employment+fp$Implicit.Price.Deflator+fp$labor.share+fp$Unit.Labor.Costs+fp$Unit.Nonlabor.Payments))
+  return(lm(fp$Real.Output.Per.Person~fp$labor.share+fp$Unit.Labor.Costs))
+}
+tab <-data.frame("rho" = rho, "SSE" =sapply(rho,function(r) {deviance(hildreth.lu(r,fit))}))
+rhat.min=rho[which.min(tab$SSE)]
+rhat.min
+oupprime.hl<-rep(0,291-1)
+emprime.hl<-rep(0,291-1)
+ipdprime.hl<-rep(0,291-1)
+lsprime.hl<-rep(0,291-1)
+lcprime.hl<-rep(0,291-1)
+nlpprime.hl<-rep(0,291-1)
+###HL model1
+for(i in 1:290){
+  oupprime.hl[i]<-fp$Real.Output.Per.Person[i+1]-rhat.min*fp$Real.Output.Per.Person[i]
+  emprime.hl[i]<-fp$Employment[i+1]-rhat.min*fp$Employment[i]
+  ipdprime.hl[i]<-fp$Implicit.Price.Deflator[i+1]-rhat.min*fp$Implicit.Price.Deflator[i]
+  lsprime.hl[i]<-fp$labor.share[i+1]-rhat.min*fp$labor.share[i]
+  lcprime.hl[i]<-fp$Unit.Labor.Costs[i+1]-rhat.min*fp$Unit.Labor.Costs[i]
+  nlpprime.hl[i]<-fp$Unit.Nonlabor.Payments[i+1]-rhat.min*fp$Unit.Nonlabor.Payments[i]
+}
+#fit.hl<-lm(oupprime.hl~emprime.hl+ipdprime.hl+lsprime.hl+lcprime.hl+nlpprime.hl
+fit.hl<-lm(oupprime.hl~lsprime.hl+lcprime.hl)
+summary(fit.hl)
+dwtest(fit.hl)
+hist(rstudent(fit.hl))##skewed to the left
+
+##2nd transform
+oupprime.hl1<-rep(0,290-1)
+emprime.hl1<-rep(0,290-1)
+ipdprime.hl1<-rep(0,290-1)
+lsprime.hl1<-rep(0,290-1)
+lcprime.hl1<-rep(0,290-1)
+nlpprime.hl1<-rep(0,290-1)
+for(i in 1:289){
+  oupprime.hl1[i]<-log(oupprime.hl)[i+1]-rhat*log(oupprime.hl)[i]
+  emprime.hl1[i]<-emprime.hl[i+1]-rhat*emprime.hl[i]
+  ipdprime.hl1[i]<-ipdprime.hl[i+1]-rhat*ipdprime.hl[i]
+  lsprime.hl1[i]<-lsprime.hl[i+1]-rhat*lsprime.hl[i]
+  lcprime.hl1[i]<-lcprime.hl[i+1]-rhat*lcprime.hl[i]
+  nlpprime.hl1[i]<-nlpprime.hl[i+1]-rhat*nlpprime.hl[i]
+}
+fit.hl1<-lm(oupprime.hl1~lsprime.hl1+lcprime.hl1)
+summary(fit.hl1)
+dwtest(fit.hl1)
+hist(rstudent(fit.hl1))
+plot(rstudent(fit.hl1))
+qqnorm(rstudent(fit.hl1))
+acf(rstudent(fit.hl1))
+dwtest(fit.hl1,alternative=c("less"))
+###Cochrane-Orcutt method
+res<-fit$residuals
+rnum<-0
+rdenom<-0
+for(i in 2:291){
+  rnum<-rnum+res[i]*res[i-1]
+  rdenom<-rdenom+res[i-1]^2
+}
+rhat<- rnum/rdenom
+oupprime<-rep(0,291-1)
+emprime<-rep(0,291-1)
+ipdprime<-rep(0,291-1)
+lsprime<-rep(0,291-1)
+lcprime<-rep(0,291-1)
+nlpprime<-rep(0,291-1)
+for(i in 1:290){
+  oupprime[i]<-fp$Real.Output.Per.Person[i+1]-rhat*fp$Real.Output.Per.Person[i]
+  emprime[i]<-fp$Employment[i+1]-rhat*fp$Employment[i]
+  ipdprime[i]<-fp$Implicit.Price.Deflator[i+1]-rhat*fp$Implicit.Price.Deflator[i]
+  lsprime[i]<-fp$labor.share[i+1]-rhat*fp$labor.share[i]
+  lcprime[i]<-fp$Unit.Labor.Costs[i+1]-rhat*fp$Unit.Labor.Costs[i]
+  nlpprime[i]<-fp$Unit.Nonlabor.Payments[i+1]-rhat*fp$Unit.Nonlabor.Payments[i]
+}
+#fit.trans<-lm(oupprime~emprime+ipdprime+lsprime+lcprime+nlpprime)
+fit.trans<-lm(oupprime~lsprime+lcprime)
+summary(fit.trans)
+dwtest(fit.trans)
+rhat
+hist(rstudent(fit.trans)) #a outlier and skewness, deviation, systematic deviation, could affect my inference, any model would reduce the outlier would work
+qqnorm(rstudent(fit.trans))
+plot(rstudent(fit.trans))
+acf(rstudent(fit.trans))
+###CO 2
+res<-fit$residuals
+rnum<-0
+rdenom<-0
+for(i in 2:290){
+  rnum<-rnum+res[i]*res[i-1]
+  rdenom<-rdenom+res[i-1]^2
+}
+rhat<- rnum/rdenom
+oupprime1<-rep(0,290-1)
+emprime1<-rep(0,290-1)
+ipdprime1<-rep(0,290-1)
+lsprime1<-rep(0,290-1)
+lcprime1<-rep(0,290-1)
+nlpprime1<-rep(0,290-1)
+for(i in 1:289){
+  oupprime1[i]<-log(oupprime)[i+1]-rhat*log(oupprime)[i]
+  emprime1[i]<-emprime[i+1]-rhat*emprime[i]
+  ipdprime1[i]<-ipdprime[i+1]-rhat*ipdprime[i]
+  lsprime1[i]<-lsprime[i+1]-rhat*lsprime[i]
+  lcprime1[i]<-lcprime[i+1]-rhat*lcprime[i]
+  nlpprime1[i]<-nlpprime[i+1]-rhat*nlpprime[i]
+}
+fit.trans1<-lm(oupprime1~lsprime1+lcprime1)
+summary(fit.trans1)
+dwtest(fit.trans1)
+plot(rstudent(fit.trans1))
+acf(rstudent(fit.trans1))
+dwtest(fit.trans1,alternative=c("less"))
+rhat
+hist(rstudent(fit.trans1)) #a outlier and skewness, deviation, systematic deviation, could affect my inference, any model would reduce the outlier would work
+qqnorm(rstudent(fit.trans1))
+
+
+###first difference method
+rhat2<-1
+oupprime.fd<-rep(0,291-1)
+emprime.fd<-rep(0,291-1)
+ipdprime.fd<-rep(0,291-1)
+lsprime.fd<-rep(0,291-1)
+lcprime.fd<-rep(0,291-1)
+nlpprime.fd<-rep(0,291-1)
+for(i in 1:290){
+  oupprime.fd[i]<-fp$Real.Output.Per.Person[i+1]-rhat2*fp$Real.Output.Per.Person[i]
+  emprime.fd[i]<-fp$Employment[i+1]-rhat2*fp$Employment[i]
+  ipdprime.fd[i]<-fp$Implicit.Price.Deflator[i+1]-rhat2*fp$Implicit.Price.Deflator[i]
+  lsprime.fd[i]<-fp$labor.share[i+1]-rhat2*fp$labor.share[i]
+  lcprime.fd[i]<-fp$Unit.Labor.Costs[i+1]-rhat2*fp$Unit.Labor.Costs[i]
+  nlpprime.fd[i]<-fp$Unit.Nonlabor.Payments[i+1]-rhat2*fp$Unit.Nonlabor.Payments[i]
+}
+#fit.fd<-lm(oupprime.fd~emprime.fd-1+ipdprime.fd-1+lsprime.fd-1+lcprime.fd-1+nlpprime.fd-1)
+fit.fd<-lm(oupprime.fd~lsprime.fd-1+lcprime.fd-1)
+summary(fit.fd)
+dwtest(fit.fd)
+plot(rstudent(fit.fd))
+acf(rstudent(fit.fd))
+
+rhat2<-1
+oupprime.fd1<-rep(0,290-1)
+emprime.fd1<-rep(0,290-1)
+ipdprime.fd1<-rep(0,290-1)
+lsprime.fd1<-rep(0,290-1)
+lcprime.fd1<-rep(0,290-1)
+nlpprime.fd1<-rep(0,290-1)
+for(i in 1:289){
+  oupprime.fd1[i]<-log(oupprime.fd)[i+1]-rhat2*log(oupprime.fd)[i]
+  emprime.fd1[i]<-emprime.fd[i+1]-rhat2*emprime.fd[i]
+  ipdprime.fd1[i]<-ipdprime.fd[i+1]-rhat2*ipdprime.fd[i]
+  lsprime.fd1[i]<-lsprime.fd[i+1]-rhat2*lsprime.fd[i]
+  lcprime.fd1[i]<-lcprime.fd[i+1]-rhat2*lcprime.fd[i]
+  nlpprime.fd1[i]<-nlpprime.fd[i+1]-rhat2*nlpprime.fd[i]
+}
+fit.fd1<-lm(oupprime.fd1~lsprime.fd1-1+lcprime.fd1-1)
+summary(fit.fd1)
+dwtest(fit.fd1)
+plot(rstudent(fit.fd1))
+acf(rstudent(fit.fd1))
+dwtest(fit.fd1,alternative = c("less"))
+hist(rstudent(fit.fd1)) 
+qqnorm(rstudent(fit.fd1))
+
+
+### CODES FOR ARIMA
+
+
+```{r}
+data=read.csv('C:/Users/admin/Desktop/time series/All data (index).csv')
+tsdata = ts(data, start = c(1947,1), frequency = 4)
+```
+
+
+```{r}
+plot(HoltWinters(tsdata[,3], seasonal="addit")$fitted,main='HoltWinters for Employment')
+```
+
+
+```{r}
+plot(HoltWinters(tsdata[,4], seasonal="addit")$fitted,main='HoltWinters for Implicit.Price.Deflator')
+```
+
+
+### Correlation matrix:
+
+```{r}
+res <- cor(data[,2:7])
+
+corrplot(res, type = "upper", method = "number",
+tl.col = "black", tl.srt = 30,main=" Cross-Correlation heatmap")
+```
+
+
+```{r}
+library(tseries)
+pairs(data[,2:7],col="gold3",main="Scatterplots for all variables")
+```
+
+
+
+```{r}
+output=data$Real.Output.Per.Person
+output.train=output[1:270]
+output.pred=output[271:291]
+tsoutput = ts(output.train, start = c(1947,1), frequency = 4)
+plot(tsoutput,main='Business Sector: Real Output Per Person from 1947 to 2019',col='orange',type='o')
+```
+
+
+### ARIMA Method
+
+```{r}
+pp.test(output.train)
+```
+
+
+### 1. First Differnece:
+```{r}
+library(fUnitRoots)
+urkpssTest(tsoutput, type = c("tau"), lags = c("short"),use.lag = NULL, doplot = TRUE)
+tsstationary = diff(tsoutput, differences=1)
+adf.test(tsstationary)
+plot(tsstationary)
+```
+
+```{r}
+acf(tsstationary,lag.max=291)
+```
+
+```{r}
+pacf(tsstationary,lag.max = 291)
+```
+
+### 2. Second Difference
+
+```{r}
+library(fUnitRoots)
+urkpssTest(tsoutput, type = c("tau"), lags = c("short"),use.lag = NULL, doplot = TRUE)
+tsstationary = diff(tsoutput, differences=2)
+adf.test(tsstationary)
+plot(tsstationary)
+```
+
+```{r}
+acf(tsstationary,lag.max=291)
+```
+
+```{r}
+pacf(tsstationary,lag.max = 291)
+```
+
+
+### Model Selection FOR ARIMA:
+
+```{r}
+library(forecast)
+```
+
+```{r}
+arima(tsoutput,order=c(0,1,2))
+arima(tsoutput,order=c(0,1,3))
+arima(tsoutput,order=c(0,1,4))
+
+arima(tsoutput,order=c(2,1,0))
+arima(tsoutput,order=c(1,1,0))
+arima(tsoutput,order=c(0,2,1))
+arima(tsoutput,order=c(0,2,2))
+arima(tsoutput,order=c(0,2,3))
+
+```
+
+
+```{r}
+fitARIMA=arima(tsoutput,order=c(0,2,1))
+```
+
+
+### Drop the last 5%-10% of the data to do forcasting
+
+```{r}
+futurVal <- predict(fitARIMA,n.ahead=21)
+output.pred=ts(output.pred,start = c(2014,3),frequency = 4)
+
+ts.plot(futurVal$pred,type='o',xlim=c(),main='Drop the last 5%-10% of the data to do forcasting')
+points(output.pred,col='red')
+#futurVal$pred
+#output.pred
+# Residuals
+futurVal$pred-output.pred
+
+qqnorm(futurVal$se, pch = 1, frame = FALSE)
+qqline(futurVal$se, col = "steelblue", lwd = 2)
+
+```
+
+
+```{r}
+library(MLmetrics)
+MSE(futurVal$pred,output.pred)
+```
+
+
+```{r}
+acf(fitARIMA$residuals)
+library(FitAR)
+boxresult=LjungBoxTest (fitARIMA$residuals,k=2,StartLag=1)
+plot(boxresult[,3],main= "Ljung-Box Q Test", ylab= "P-values", xlab= "Lag")
+qqnorm(fitARIMA$residuals)
+qqline(fitARIMA$residuals)
+```
+
+
+
+### Forecast a few steps into the future (or the past) using all of your data
+
+
+```{r}
+tsoutput.all = ts(output, start = c(1947,1), frequency = 4)
+```
+
+
+```{r}
+fitARIMA.all=arima(tsoutput.all,order=c(0,2,1))
+```
+
+
+```{r}
+frec<- predict(fitARIMA.all,n.ahead=24)
+ts.plot(tsoutput.all, frec$pred, col=1:2, xlim=c(1947,2026))
+lines(frec$pred, type="p", col=2,main='Forecasting for the future')
+lines(frec$pred + 1*frec$se, lty="dashed", col=4)
+lines(frec$pred - 1*frec$se, lty="dashed", col=4)
+frec$pred
+```
+
+
+
+
+```{r}
+futurVal.2 <- forecast(fitARIMA.all,h=24, level=c(99.5))
+plot(futurVal.2)
+cat('The lower bond is: \n',futurVal.2$lower,'\n')
+cat('The upper bond is: \n',futurVal.2$upper,'\n')
+```
+
+
+```{r}
+qqnorm(frec$se, pch = 1, frame = FALSE)
+qqline(frec$se, col = "steelblue", lwd = 2)
+```
+
+
+### ARIMA WITH PREDICTORS
+
+
+```{r}
+xreg=cbind(data$labor.share[1:270],data$Unit.Labor.Costs[1:270])
+fitARIMA.2=arima(data$Real.Output.Per.Person[1:270],xreg=xreg,order=c(0,2,1))
+fitARIMA.2
+checkresiduals(fitARIMA.2)
+```
+
+
+
+```{r}
+boxresult.2=LjungBoxTest (fitARIMA.2$residuals,k=2,StartLag=1)
+plot(boxresult.2[,3],main= "Ljung-Box Q Test", ylab= "P-values", xlab= "Lag")
+```
+
+
+###Predict
+
+###1. Drop 21 obs
+
+```{r}
+newxreg=cbind(data$labor.share[271:291],data$Unit.Labor.Costs[271:291])
+futurVal.2 <- predict(fitARIMA.2,newxreg=newxreg,n.ahead=21)
+futurVal.2.pred=ts(futurVal.2$pred,start = c(2014,3), frequency = 4)
+output.pred=ts(output.pred,start = c(2014,3),frequency = 4)
+
+ts.plot(futurVal.2.pred,type='o',xlim=c(),main='Drop the last 21 of the data to do forcasting')
+points(output.pred,col='red')
+#futurVal$pred
+#output.pred
+
+qqnorm(futurVal.2$se, pch = 1, frame = FALSE)
+qqline(futurVal.2$se, col = "steelblue", lwd = 2)
+```
+
+
+```{r}
+MSE(futurVal.2.pred,output.pred)
+```
+
+
+### 2. Predict into the future, 2 years.
+
+```{r}
+xreg=cbind(data$labor.share,data$Unit.Labor.Costs)
+fitARIMA.3=arima(data$Real.Output.Per.Person,xreg=xreg,order=c(0,2,1))
+fitARIMA.3
+```
+
+
+```{r}
+newxreg=cbind(rep(mean(data$labor.share[271:291],12)),rep(mean(data$Unit.Labor.Costs[271:291],12)))
+output.all=ts(data$Real.Output.Per.Person,start = c(1947,1),frequency=4)
+```
+
+
+```{r}
+forecast.3<- predict(fitARIMA.3,newxreg=newxreg,n.ahead=12)
+frec=ts(forecast.3$pred,start = c(2019,3), frequency = 4)
+frec
+se=ts(forecast.3$se,start = c(2019,3), frequency = 4)
+ts.plot(output.all, frec, col=1:2, xlim=c(1947,2021))
+lines(frec, type="p", col=2)
+lines(frec + 1*se, lty="dashed", col=4)
+lines(frec - 1*se, lty="dashed", col=4)
+```
+
+
+
+
+
+
+
+
+
+
